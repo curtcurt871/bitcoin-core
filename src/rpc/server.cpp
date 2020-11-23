@@ -149,6 +149,7 @@ static RPCHelpMan help()
     }
     if (strCommand == "dump_all_command_conversions") {
         // Used for testing only, undocumented
+        const_cast<JSONRPCRequest&>(jsonRequest).mode = JSONRPCRequest::GET_ARGS;
         return tableRPC.dumpArgMap(jsonRequest);
     }
 
@@ -492,11 +493,8 @@ std::vector<std::string> CRPCTable::listCommands() const
     return commandList;
 }
 
-UniValue CRPCTable::dumpArgMap(const JSONRPCRequest& args_request) const
+UniValue CRPCTable::dumpArgMap(const JSONRPCRequest& request) const
 {
-    JSONRPCRequest request(args_request);
-    request.mode = JSONRPCRequest::GET_ARGS;
-
     UniValue ret{UniValue::VARR};
     for (const auto& cmd : mapCommands) {
         UniValue result;
